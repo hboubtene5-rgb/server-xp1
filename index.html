@@ -1,168 +1,593 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xp</title>
-    <link rel="icon" type="image/png" href="https://a.top4top.io/p_3903dquip1.jpg" />
-    <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <canvas id="starsCanvas"></canvas>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Embed Ultra Studio | Tojialone1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            dark: '#090a0f',
+                            card: '#12141c',
+                            input: '#1a1d28',
+                            border: '#262a3b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #090a0f; color: #e2e8f0; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel {
+            background: rgba(18, 20, 28, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .glow-effect {
+            box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.25);
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #090a0f; }
+        ::-webkit-scrollbar-thumb { background: #262a3b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <header>
-      <div class="logo-wrap">
-        <div class="logo-box">
-          <img src="https://a.top4top.io/p_3903dquip1.jpg" alt="TC Logo" class="logo" />
+    <!-- Top Glow Background -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-indigo-600/10 blur-[140px] pointer-events-none rounded-full"></div>
+
+    <!-- Header -->
+    <header class="glass-panel sticky top-0 z-50 px-6 py-4 border-b border-white/5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 text-white text-xl">
+                <i class="fa-brands fa-discord"></i>
+            </div>
+            <div>
+                <h1 class="text-base font-black text-white tracking-wider flex items-center gap-2">
+                    DISCORD EMBED STUDIO <span class="text-[10px] bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full font-mono">v3.0</span>
+                </h1>
+                <p class="text-xs text-slate-400">تصميم وتطوير بواسطة <span class="text-indigo-400 font-bold">tojialone1</span></p>
+            </div>
         </div>
-        <span class="site-name">Xp</span>
-      </div>
-      <nav>
-        <button class="nav-btn active" data-tab="cv2"><span>Components v2</span></button>
-        <button class="nav-btn" data-tab="webhook"><span>Webhook Sender</span></button>
-      </nav>
+        
+        <div class="flex items-center gap-2">
+            <button onclick="loadPreset('welcome')" class="px-3.5 py-2 bg-white/5 hover:bg-white/10 text-xs font-semibold rounded-xl border border-white/5 transition flex items-center gap-2 text-slate-300 hover:text-white">
+                <i class="fa-solid fa-hand text-emerald-400"></i> ترحيب
+            </button>
+            <button onclick="loadPreset('rules')" class="px-3.5 py-2 bg-white/5 hover:bg-white/10 text-xs font-semibold rounded-xl border border-white/5 transition flex items-center gap-2 text-slate-300 hover:text-white">
+                <i class="fa-solid fa-shield text-amber-400"></i> قوانين
+            </button>
+            <button onclick="loadPreset('update')" class="px-3.5 py-2 bg-white/5 hover:bg-white/10 text-xs font-semibold rounded-xl border border-white/5 transition flex items-center gap-2 text-slate-300 hover:text-white">
+                <i class="fa-solid fa-rocket text-indigo-400"></i> تحديث
+            </button>
+            <button onclick="resetAll()" class="px-3.5 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold rounded-xl border border-red-500/20 transition flex items-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> إفراغ
+            </button>
+        </div>
     </header>
 
-    <main>
-
-      <section class="tool-section active" id="cv2">
-        <div class="section-header">
-          <h2>Discord Components v2</h2>
-          <p>ابني الـ Container بصرياً وشوف الكود جاهز على طول</p>
-        </div>
-        <div class="cv2-layout">
-          <div class="cv2-controls">
-            <div class="cv2-palette">
-              <span class="palette-label">ضيف مكون</span>
-              <div class="palette-btns">
-                <button class="palette-btn" data-type="text">📝 نص</button>
-                <button class="palette-btn" data-type="actionRow">🔘 أزرار</button>
-                <button class="palette-btn" data-type="select">📋 قائمة</button>
-                <button class="palette-btn" data-type="separator">➖ فاصل</button>
-                <button class="palette-btn" data-type="media">🖼️ صورة</button>
-                <button class="palette-btn" data-type="section">📌 Section</button>
-              </div>
-            </div>
-            <div class="cv2-list" id="cv2List">
-              <div class="cv2-empty-list">اضغط على المكون اللي عايزه</div>
-            </div>
-          </div>
-          <div class="cv2-preview-col">
-            <div class="cv2-preview-label">معاينة Discord</div>
-            <div class="cv2-discord-bg">
-              <div class="dc-message">
-                <img src="https://a.top4top.io/p_3903dquip1.jpg" class="dc-avatar" />
-                <div class="dc-message-body">
-                  <div class="dc-username">Xp Bot <span class="dc-bot-badge">BOT</span></div>
-                  <div class="dc-container" id="cv2Preview">
-                    <div class="dc-empty-hint">ضيف مكونات الأول</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="cv2-code-wrap">
-          <div class="cv2-code-header">
-            <span>الكود المولّد — Discord.js v14</span>
-            <button class="copy-btn" id="cv2CopyBtn">نسخ</button>
-          </div>
-          <pre class="cv2-code" id="cv2Code">ضيف مكونات الأول عشان يتولد الكود</pre>
-        </div>
-      </section>
-
-      <section class="tool-section" id="webhook">
-        <div class="section-header">
-          <h2>Webhook Sender</h2>
-          <p>ابني الـ Webhook واختبره على طول من غير ما تكتب كود</p>
-        </div>
-        <div class="webhook-layout">
-          <div class="webhook-form-col">
-            <div class="tool-card">
-              <div class="control-group">
-                <label>Webhook URL</label>
-                <input type="text" id="whUrl" placeholder="https://discord.com/api/webhooks/..." />
-              </div>
-              <div class="control-group">
-                <label>اسم المرسل (اختياري)</label>
-                <input type="text" id="whUsername" placeholder="اسم البوت" />
-              </div>
-            </div>
-            <div class="tool-card">
-              <div class="card-title">إعدادات الـ Embed</div>
-              <div class="control-group">
-                <label>العنوان</label>
-                <input type="text" id="whTitle" placeholder="عنوان الـ embed" />
-              </div>
-              <div class="control-group">
-                <label>الوصف</label>
-                <textarea id="whDesc" placeholder="نص الـ embed..." rows="3"></textarea>
-              </div>
-              <div class="two-col">
-                <div class="control-group">
-                  <label>اللون</label>
-                  <div class="color-row">
-                    <input type="color" id="whColorPicker" value="#aa00ff" />
-                    <input type="text" id="whColor" value="#AA00FF" placeholder="#AA00FF" />
-                  </div>
-                </div>
-                <div class="control-group">
-                  <label>Footer</label>
-                  <input type="text" id="whFooter" placeholder="نص الـ footer" />
-                </div>
-              </div>
-              <div class="control-group">
-                <label>رابط الصورة (اختياري)</label>
-                <input type="text" id="whImage" placeholder="https://..." />
-              </div>
-            </div>
-            <button class="main-btn" id="whSendBtn">ابعت للـ Webhook ↗️</button>
-            <div id="whStatus" class="wh-status"></div>
-          </div>
-          <div class="webhook-preview-col">
-            <div class="cv2-preview-label">معاينة مباشرة</div>
-            <div class="cv2-discord-bg">
-              <div class="dc-message">
-                <img src="https://a.top4top.io/p_3903dquip1.jpg" class="dc-avatar" />
-                <div class="dc-message-body">
-                  <div class="dc-username" id="whPreviewName">Xp Bot <span class="dc-bot-badge">BOT</span></div>
-                  <div class="dc-embed" id="whEmbed">
-                    <div class="dc-embed-bar" id="whEmbedBar"></div>
-                    <div class="dc-embed-content">
-                      <div class="dc-embed-title" id="whPreviewTitle"></div>
-                      <div class="dc-embed-desc" id="whPreviewDesc"></div>
-                      <img class="dc-embed-image" id="whPreviewImg" src="" style="display:none" />
-                      <div class="dc-embed-footer" id="whPreviewFooter"></div>
+    <!-- Main Content -->
+    <main class="max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow z-10">
+        
+        <!-- Controls Column -->
+        <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Webhook Config Card -->
+            <div class="glass-panel rounded-3xl p-6 glow-effect space-y-4">
+                <h2 class="text-xs font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-globe text-indigo-500"></i> إعدادات الويب هوك (Webhook)
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1.5">رابط الويب هوك (Webhook URL)</label>
+                        <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/..." class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition font-mono">
                     </div>
-                  </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">اسم البوت المرسل</label>
+                            <input type="text" id="webhookName" value="Tojialone Bot" oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">رابط صورة الأفاتار (Avatar URL)</label>
+                            <input type="text" id="webhookAvatar" placeholder="https://..." oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition font-mono">
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
+
+            <!-- Content & Embed Card -->
+            <div class="glass-panel rounded-3xl p-6 space-y-5">
+                <h2 class="text-xs font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-indigo-500"></i> محتوى الإمبيد والتفاصيل
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1.5">الرسالة النصية الأساسية (Content)</label>
+                        <textarea id="msgContent" rows="2" placeholder="مرحباً بالجميع! @everyone" oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition resize-none"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">لون الشريط الجانبي للإمبيد</label>
+                            <div class="flex items-center gap-3 bg-brand-input px-3 py-2 rounded-xl border border-brand-border">
+                                <input type="color" id="embedColor" value="#6366f1" oninput="updatePreview()" class="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0">
+                                <input type="text" id="embedColorHex" value="#6366f1" oninput="syncColorHex()" class="w-full bg-transparent text-white text-xs focus:outline-none font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">اسم المؤلف (Author Name)</label>
+                            <input type="text" id="authorName" placeholder="اسم صاحب الإمبيد" oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1.5">عنوان الإمبيد (Title)</label>
+                        <input type="text" id="embedTitle" placeholder="عنوان الإمبيد الرئيسي" oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1.5">وصف الإمبيد (Description)</label>
+                        <textarea id="embedDesc" rows="4" placeholder="اكتب تفاصيل الإمبيد هنا..." oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">الصورة المصغرة (Thumbnail URL)</label>
+                            <input type="text" id="embedThumbnail" placeholder="https://..." oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">الصورة الكبيرة (Image URL)</label>
+                            <input type="text" id="embedImage" placeholder="https://..." oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition font-mono">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">نص التذييل (Footer Text)</label>
+                            <input type="text" id="embedFooter" placeholder="حقوق أو ملاحظة تذييل" oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">أيقونة التذييل (Footer Icon URL)</label>
+                            <input type="text" id="embedFooterIcon" placeholder="https://..." oninput="updatePreview()" class="w-full bg-brand-input text-white text-xs rounded-xl px-4 py-3 border border-brand-border focus:outline-none focus:border-indigo-500 transition font-mono">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 pt-2">
+                        <input type="checkbox" id="embedTimestamp" checked onchange="updatePreview()" class="w-4 h-4 accent-indigo-500 rounded bg-brand-input cursor-pointer">
+                        <label for="embedTimestamp" class="text-xs font-semibold text-white cursor-pointer">إظهار طابع الوقت الحالي (Timestamp)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fields Builder Card -->
+            <div class="glass-panel rounded-3xl p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-list text-indigo-500"></i> الحقول (Fields)
+                    </h2>
+                    <button onclick="addField()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-indigo-600/30">
+                        <i class="fa-solid fa-plus"></i> إضافة حقل جديد
+                    </button>
+                </div>
+                <div id="fieldsContainer" class="space-y-3">
+                    <!-- Dynamic fields -->
+                </div>
+            </div>
+
         </div>
-      </section>
+
+        <!-- Preview & Output Column -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <!-- Live Preview Card -->
+            <div class="glass-panel rounded-3xl p-6 sticky top-24 space-y-5">
+                <h2 class="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-eye text-emerald-500"></i> المعاينة الحية (Live Preview)
+                </h2>
+                
+                <!-- Discord Chat Box Simulation -->
+                <div class="bg-[#1e1f22] rounded-2xl p-4 border border-white/5 font-sans space-y-3">
+                    
+                    <!-- Webhook Header -->
+                    <div class="flex items-start gap-3">
+                        <img id="prevAvatar" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f916.png" class="w-10 h-10 rounded-full object-cover mt-0.5 bg-indigo-600 shadow-md" alt="Avatar">
+                        <div class="flex-grow min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span id="prevName" class="font-bold text-white text-sm hover:underline cursor-pointer">Tojialone Bot</span>
+                                <span class="bg-[#5865f2] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">BOT</span>
+                                <span id="prevTime" class="text-[11px] text-slate-400">اليوم الساعة 01:04 ص</span>
+                            </div>
+                            
+                            <!-- Content -->
+                            <div id="prevContent" class="text-sm text-slate-200 mt-1 whitespace-pre-wrap break-words"></div>
+
+                            <!-- Embed Container -->
+                            <div id="embedWrapper" class="mt-2 flex max-w-lg bg-[#2b2d31] rounded-r-md border-l-[4px] border-indigo-500 p-4 relative shadow-lg">
+                                <div class="flex-grow space-y-2 min-w-0">
+                                    
+                                    <!-- Author -->
+                                    <div id="prevAuthorRow" class="hidden items-center gap-2 text-xs font-semibold text-white">
+                                        <span id="prevAuthor"></span>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <div id="prevTitle" class="text-base font-bold text-white hover:underline cursor-pointer hidden"></div>
+
+                                    <!-- Description -->
+                                    <div id="prevDesc" class="text-sm text-slate-300 whitespace-pre-wrap break-words hidden"></div>
+
+                                    <!-- Fields Grid -->
+                                    <div id="prevFieldsGrid" class="grid grid-cols-1 md:grid-cols-12 gap-2 pt-1"></div>
+
+                                    <!-- Image -->
+                                    <div id="prevImageWrapper" class="mt-3 hidden">
+                                        <img id="prevImage" class="rounded-lg max-h-60 object-cover w-full cursor-pointer" alt="Embed Image">
+                                    </div>
+
+                                    <!-- Footer -->
+                                    <div id="prevFooterRow" class="hidden items-center gap-2 pt-2 text-[11px] text-slate-400">
+                                        <img id="prevFooterIcon" class="w-4 h-4 rounded-full hidden" alt="">
+                                        <span id="prevFooter"></span>
+                                    </div>
+
+                                </div>
+
+                                <!-- Thumbnail -->
+                                <div id="prevThumbWrapper" class="ml-4 flex-shrink-0 hidden">
+                                    <img id="prevThumbnail" class="w-20 h-20 rounded-lg object-cover shadow" alt="Thumbnail">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button onclick="sendWebhook()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30">
+                        <i class="fa-solid fa-paper-plane"></i> إرسال للديسكورد
+                    </button>
+                    <button onclick="copyJSON()" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30">
+                        <i class="fa-solid fa-code"></i> نسخ كود JSON
+                    </button>
+                </div>
+
+                <!-- Toast Alert -->
+                <div id="toast" class="hidden p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-2xl text-center"></div>
+            </div>
+
+        </div>
 
     </main>
 
-    <footer>
-      <img src="https://a.top4top.io/p_3903dquip1.jpg" alt="logo" class="footer-logo" />
-      <span>Powered By TC Team — RED</span>
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-white/5 py-4 text-center text-xs text-slate-400 z-10">
+        تم التصميم والتطوير بكل وله بواسطة <span class="text-indigo-400 font-bold">tojialone1</span> &copy; 2026
     </footer>
 
-    <div class="cv2-modal-overlay" id="cv2Modal">
-      <div class="cv2-modal-box">
-        <div class="cv2-modal-header">
-          <span id="cv2ModalTitle">ضيف مكون</span>
-          <button class="cv2-modal-close" id="cv2ModalClose">✕</button>
-        </div>
-        <div class="cv2-modal-body" id="cv2ModalBody"></div>
-        <div class="cv2-modal-footer">
-          <button class="main-btn" id="cv2ModalSave">تمام</button>
-        </div>
-      </div>
-    </div>
+    <script>
+        let fields = [];
 
-    <script src="script.js"></script>
-  </body>
+        function syncColorHex() {
+            let color = document.getElementById('embedColorHex').value;
+            if(color.startsWith('#') && (color.length === 4 || color.length === 7)) {
+                document.getElementById('embedColor').value = color;
+                updatePreview();
+            }
+        }
+
+        document.getElementById('embedColor').addEventListener('input', (e) => {
+            document.getElementById('embedColorHex').value = e.target.value;
+            updatePreview();
+        });
+
+        function addField(name = '', value = '', inline = false) {
+            fields.push({ name, value, inline });
+            renderFields();
+            updatePreview();
+        }
+
+        function removeField(index) {
+            fields.splice(index, 1);
+            renderFields();
+            updatePreview();
+        }
+
+        function renderFields() {
+            let container = document.getElementById('fieldsContainer');
+            container.innerHTML = '';
+            if(fields.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-500 text-center py-2">لا توجد حقول مضافة حالياً.</p>';
+                return;
+            }
+            fields.forEach((field, index) => {
+                let div = document.createElement('div');
+                div.className = 'bg-brand-input p-4 rounded-2xl border border-brand-border space-y-3 relative';
+                div.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-indigo-400">حقل رقم ${index + 1}</span>
+                        <button onclick="removeField(${index})" class="text-red-400 hover:text-red-300 text-xs flex items-center gap-1"><i class="fa-solid fa-trash"></i> حذف</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <input type="text" placeholder="عنوان الحقل (Name)" value="${field.name}" oninput="fields[${index}].name = this.value; updatePreview()" class="bg-brand-dark text-white text-xs rounded-xl px-3 py-2.5 border border-brand-border focus:outline-none focus:border-indigo-500">
+                        <input type="text" placeholder="قيمة الحقل (Value)" value="${field.value}" oninput="fields[${index}].value = this.value; updatePreview()" class="bg-brand-dark text-white text-xs rounded-xl px-3 py-2.5 border border-brand-border focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="inline_${index}" ${field.inline ? 'checked' : ''} onchange="fields[${index}].inline = this.checked; updatePreview()" class="w-3.5 h-3.5 accent-indigo-500 rounded bg-brand-dark cursor-pointer">
+                        <label for="inline_${index}" class="text-xs text-slate-400 cursor-pointer">جعل الحقل بجانب الآخر (Inline)</label>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updatePreview() {
+            let name = document.getElementById('webhookName').value || 'Tojialone Bot';
+            let avatar = document.getElementById('webhookAvatar').value || 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f916.png';
+            document.getElementById('prevName').innerText = name;
+            document.getElementById('prevAvatar').src = avatar;
+
+            let content = document.getElementById('msgContent').value;
+            let prevContent = document.getElementById('prevContent');
+            if(content.trim() !== '') {
+                prevContent.innerText = content;
+                prevContent.classList.remove('hidden');
+            } else {
+                prevContent.classList.add('hidden');
+            }
+
+            let colorHex = document.getElementById('embedColor').value;
+            document.getElementById('embedWrapper').style.borderLeftColor = colorHex;
+
+            let authorName = document.getElementById('authorName').value;
+            let authorRow = document.getElementById('prevAuthorRow');
+            let authorSpan = document.getElementById('prevAuthor');
+            if(authorName.trim() !== '') {
+                authorSpan.innerText = authorName;
+                authorRow.classList.remove('hidden');
+                authorRow.classList.add('flex');
+            } else {
+                authorRow.classList.add('hidden');
+                authorRow.classList.remove('flex');
+            }
+
+            let title = document.getElementById('embedTitle').value;
+            let prevTitle = document.getElementById('prevTitle');
+            if(title.trim() !== '') {
+                prevTitle.innerText = title;
+                prevTitle.classList.remove('hidden');
+            } else {
+                prevTitle.classList.add('hidden');
+            }
+
+            let desc = document.getElementById('embedDesc').value;
+            let prevDesc = document.getElementById('prevDesc');
+            if(desc.trim() !== '') {
+                prevDesc.innerText = desc;
+                prevDesc.classList.remove('hidden');
+            } else {
+                prevDesc.classList.add('hidden');
+            }
+
+            let thumb = document.getElementById('embedThumbnail').value;
+            let thumbWrapper = document.getElementById('prevThumbWrapper');
+            if(thumb.trim() !== '') {
+                document.getElementById('prevThumbnail').src = thumb;
+                thumbWrapper.classList.remove('hidden');
+            } else {
+                thumbWrapper.classList.add('hidden');
+            }
+
+            let img = document.getElementById('embedImage').value;
+            let imgWrapper = document.getElementById('prevImageWrapper');
+            if(img.trim() !== '') {
+                document.getElementById('prevImage').src = img;
+                imgWrapper.classList.remove('hidden');
+            } else {
+                imgWrapper.classList.add('hidden');
+            }
+
+            let footer = document.getElementById('embedFooter').value;
+            let footerIcon = document.getElementById('embedFooterIcon').value;
+            let footerRow = document.getElementById('prevFooterRow');
+            let footerSpan = document.getElementById('prevFooter');
+            let footerIconEl = document.getElementById('prevFooterIcon');
+            let timestamp = document.getElementById('embedTimestamp').checked;
+
+            let footerTextArr = [];
+            if(footer.trim() !== '') footerTextArr.push(footer);
+            if(timestamp) footerTextArr.push('اليوم الساعة 01:04 ص');
+
+            if(footerTextArr.length > 0) {
+                footerSpan.innerText = footerTextArr.join(' • ');
+                footerRow.classList.remove('hidden');
+                footerRow.classList.add('flex');
+            } else {
+                footerRow.classList.add('hidden');
+                footerRow.classList.remove('flex');
+            }
+
+            if(footerIcon.trim() !== '') {
+                footerIconEl.src = footerIcon;
+                footerIconEl.classList.remove('hidden');
+            } else {
+                footerIconEl.classList.add('hidden');
+            }
+
+            let fieldsGrid = document.getElementById('prevFieldsGrid');
+            fieldsGrid.innerHTML = '';
+            if(fields.length > 0) {
+                fields.forEach(f => {
+                    let fDiv = document.createElement('div');
+                    fDiv.className = f.inline ? 'col-span-6 md:col-span-4' : 'col-span-12';
+                    fDiv.innerHTML = `
+                        <div class="text-xs font-bold text-white mb-0.5">${escapeHTML(f.name)}</div>
+                        <div class="text-xs text-slate-300">${escapeHTML(f.value)}</div>
+                    `;
+                    fieldsGrid.appendChild(fDiv);
+                });
+            }
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        function buildPayload() {
+            let content = document.getElementById('msgContent').value;
+            let name = document.getElementById('webhookName').value;
+            let avatar = document.getElementById('webhookAvatar').value;
+            
+            let colorHex = document.getElementById('embedColor').value;
+            let colorInt = parseInt(colorHex.replace('#', ''), 16);
+
+            let authorName = document.getElementById('authorName').value;
+            let title = document.getElementById('embedTitle').value;
+            let desc = document.getElementById('embedDesc').value;
+            let thumb = document.getElementById('embedThumbnail').value;
+            let img = document.getElementById('embedImage').value;
+            let footer = document.getElementById('embedFooter').value;
+            let footerIcon = document.getElementById('embedFooterIcon').value;
+            let timestamp = document.getElementById('embedTimestamp').checked;
+
+            let embed = {};
+            if(colorInt) embed.color = colorInt;
+            if(authorName) embed.author = { name: authorName };
+            if(title) embed.title = title;
+            if(desc) embed.description = desc;
+            if(thumb) embed.thumbnail = { url: thumb };
+            if(img) embed.image = { url: img };
+            if(footer) embed.footer = { text: footer, icon_url: footerIcon || undefined };
+            if(timestamp) embed.timestamp = new Date().toISOString();
+            if(fields.length > 0) {
+                embed.fields = fields.map(f => ({ name: f.name, value: f.value, inline: f.inline }));
+            }
+
+            let payload = {};
+            if(content) payload.content = content;
+            if(name) payload.username = name;
+            if(avatar) payload.avatar_url = avatar;
+            if(Object.keys(embed).length > 0) payload.embeds = [embed];
+
+            return payload;
+        }
+
+        function copyJSON() {
+            let payload = buildPayload();
+            navigator.clipboard.writeText(JSON.stringify(payload, null, 4));
+            showToast('تم نسخ كود JSON بنجاح! 📋');
+        }
+
+        async function sendWebhook() {
+            let url = document.getElementById('webhookUrl').value.trim();
+            if(!url) {
+                showToast('يرجى إدخال رابط الويب هوك (Webhook URL) أولاً!', true);
+                return;
+            }
+            let payload = buildPayload();
+            try {
+                let res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if(res.ok || res.status === 204) {
+                    showToast('تم إرسال الإمبيد إلى ديسكورد بنجاح! 🚀');
+                } else {
+                    showToast('فشل الإرسال: تأكد من صحة الرابط أو البيانات.', true);
+                }
+            } catch(e) {
+                showToast('حدث خطأ أثناء الاتصال بالويب هوك.', true);
+            }
+        }
+
+        function showToast(msg, isError = false) {
+            let toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.className = `p-3 border text-xs font-semibold rounded-2xl text-center transition ${isError ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'}`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+        }
+
+        function loadPreset(type) {
+            resetAll();
+            if(type === 'welcome') {
+                document.getElementById('msgContent').value = 'مرحباً بك في السيرفر! @everyone 🎉';
+                document.getElementById('webhookName').value = 'Welcome Bot';
+                document.getElementById('embedColorHex').value = '#248046';
+                document.getElementById('embedColor').value = '#248046';
+                document.getElementById('authorName').value = 'عضو جديد انضم إلينا';
+                document.getElementById('embedTitle').value = 'نورت سيرفرنا يا غالي!';
+                document.getElementById('embedDesc').value = 'نتمنى لك قضاء وقت ممتع معنا. يرجى قراءة القوانين.';
+                document.getElementById('embedThumbnail').value = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f44b.png';
+                document.getElementById('embedFooter').value = 'نظام الترحيب • Tojialone1';
+                addField('الرتبة', 'Member', true);
+                addField('ترتيبك', '#1420', true);
+            } else if(type === 'rules') {
+                document.getElementById('msgContent').value = '📜 قوانين السيرفر الرسمية';
+                document.getElementById('webhookName').value = 'Rules System';
+                document.getElementById('embedColorHex').value = '#ed4245';
+                document.getElementById('embedColor').value = '#ed4245';
+                document.getElementById('embedTitle').value = 'قوانين وأنظمة المجتمع';
+                document.getElementById('embedDesc').value = 'الالتزام بالقوانين يضمن بيئة نظيفة وممتعة للجميع.';
+                addField('1. الإحترام المتبادل', 'يمنع الشتم أو الاستهزاء نهائياً.', false);
+                addField('2. السبام والاعلانات', 'يمنع نشر الروابط أو الإعلانات الخاصة قطعياً.', false);
+                document.getElementById('embedFooter').value = 'الإدارة • Tojialone1';
+            } else if(type === 'update') {
+                document.getElementById('msgContent').value = '🚀 تحديث جديد تم إطلاقه!';
+                document.getElementById('webhookName').value = 'Update Notifier';
+                document.getElementById('embedColorHex').value = '#6366f1';
+                document.getElementById('embedColor').value = '#6366f1';
+                document.getElementById('embedTitle').value = 'الإصدار 3.0 متاح الآن';
+                document.getElementById('embedDesc').value = 'قمنا بإضافة ميزات وتحسينات خارقة لتجربة أفضل.';
+                addField('الحالة', 'مستقر وآمن', true);
+                addField('المطور', 'tojialone1', true);
+                document.getElementById('embedFooter').value = 'سجل التحديثات';
+            }
+            updatePreview();
+        }
+
+        function resetAll() {
+            document.getElementById('webhookUrl').value = '';
+            document.getElementById('webhookName').value = 'Tojialone Bot';
+            document.getElementById('webhookAvatar').value = '';
+            document.getElementById('msgContent').value = '';
+            document.getElementById('embedColor').value = '#6366f1';
+            document.getElementById('embedColorHex').value = '#6366f1';
+            document.getElementById('authorName').value = '';
+            document.getElementById('embedTitle').value = '';
+            document.getElementById('embedDesc').value = '';
+            document.getElementById('embedThumbnail').value = '';
+            document.getElementById('embedImage').value = '';
+            document.getElementById('embedFooter').value = '';
+            document.getElementById('embedFooterIcon').value = '';
+            document.getElementById('embedTimestamp').checked = true;
+            fields = [];
+            renderFields();
+            updatePreview();
+        }
+
+        updatePreview();
+    </script>
+</body>
 </html>
